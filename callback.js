@@ -1,9 +1,39 @@
-const getUser = ()=>{
+const getUser = (callback)=>{
+
+    // setTimeout(()=>{
+    //     callback(undefined,{error:'user error'})
+    // },1000) 
+
     setTimeout(()=>{
-        return{name:"Kavindu"}
-    },1000)
-   
+        callback({name:"Kavindu"},undefined)
+    },1000)  
 }
 
-const user=getUser();
-console.log(user);
+getUser((data,error)=>{
+    if(data){
+        console.log(data);
+    }
+    else{
+        console.log(error)
+    }
+})
+
+
+const chckAuth=(abc)=>{
+    // setTimeout(()=>{
+    //     abc({auth:true},undefined);
+    // },1000);
+
+    setTimeout(()=>{
+        abc(undefined,{error:'auth error'});
+    },1000)
+}
+
+chckAuth((d,e)=>{
+    if(d){
+        console.log(d)
+    }
+    else{
+        console.log(e)
+    }
+})
