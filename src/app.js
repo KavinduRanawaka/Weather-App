@@ -1,17 +1,36 @@
+import path from 'path';
 import express from 'express';
 import weather from './Utils/weather.js';
 import geo from './Utils/geo.js';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import hbs from 'hbs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app=express();
 
-app.get("/",(req,res)=>{
-  res.send("<h1>Welcome</h1>");
-});
+const templatepath=path.join(__dirname,"../template");
+const partialpath=path.join(__dirname,"../templates/partials")
+
+app.set('view engine', 'hbs');
+app.set('views',templatepath);
+hbs.registerPartials(partialpath);
+
+const publicDirPath=path.join(__dirname,"../public")
+//console.log(publicDirPath)
+app.use(express.static(publicDirPath));
+
+app.get('/',(req,res)=>{
+  res.render("index");
+})
+
 app.get("/help",(req,res)=>{
-  res.send("<h1>help<h1>");
+  res.render("help");
 });
 app.get("/about",(req,res)=>{
-  res.send("<h1>about<h1>");
+  res.render("about");
 });
 app.get("/weather",(req,res)=>{
   if(!req.query.address){
@@ -29,9 +48,8 @@ app.get("/weather",(req,res)=>{
     })
 });
 app.get("*",(req,res)=>{
-  res.send("app not found");
+  res.render("404");
 });
 
   
-
-  app.listen(3000,()=>{console.log('server is on port 3000')});
+app.listen(3000,()=>{console.log('server is on port 3000')});
